@@ -1,21 +1,45 @@
-import java.util.Scanner;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
+import java.nio.file.Files.*;
+import java.util.function.Function;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
 public class Launcher {
     public static void main(String[] args) {
         System.out.println("Bienvenue dans l'antre du démon");
         Scanner sc = new Scanner(System.in);
         String i = sc.next();
+        Quit q= new Quit();
+        Freq fre = new Freq();
+        Fibo fib = new Fibo();
+        List<Command> coms = new LinkedList<>();
+        coms.add(q);
+        coms.add(fre);
+        coms.add(fib);
         sc.nextLine();
-        while(i.compareTo("quit") != 0){
+        boolean quit = true;
+        while(quit){
+            i = sc.next();
+            sc.nextLine();
+            boolean in = false;
+            for(Command com:coms){
+                if(i.compareTo(com.name()) == 0 ){
+                    in = true;
+                }
+            }
             switch(i){
                 case "fibo":
-                    System.out.println("suite de fibonacci \n");
-                    int fibo = sc.nextInt();
-                    sc.nextLine();
-                    int res =0;
-                        for (int j=0;j<=fibo;j++){
-                            res += j;
-                        }
-                    System.out.println("la suite de fibo vaut : "+ res+"\n");
+                    quit = fib.run(sc);
+                    break;
+                case "freq":
+                    quit = fre.run(sc);
+                    break;
+                case "quit":
+                    quit = q.run(sc);
                     break;
                 default:
                     System.out.println("Unknown command + \n");
